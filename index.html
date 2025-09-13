@@ -39,7 +39,6 @@ nav ul li a { text-decoration:none; display:flex; flex-direction:column; align-i
 </head>
 <body>
 
-<!-- Navbar -->
 <nav>
     <ul>
         <li><a href="index.html"><i class="fas fa-home"></i><span>Acasă</span></a></li>
@@ -52,8 +51,9 @@ nav ul li a { text-decoration:none; display:flex; flex-direction:column; align-i
 <!-- Login/Register -->
 <div id="authContainer">
     <h2>Autentificare / Înregistrare</h2>
-    <input type="email" id="email" placeholder="Email"><br>
-    <input type="password" id="password" placeholder="Parola"><br>
+    <input type="text" id="displayName" placeholder="Nume de utilizator">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Parola">
     <button id="loginBtn">Loghează-te</button>
     <button id="signupBtn">Înregistrează-te</button>
 </div>
@@ -89,7 +89,7 @@ auth.onAuthStateChanged(user => {
     if(user){
         authContainer.style.display = "none";
         heroContainer.style.display = "flex";
-        profileLi.innerHTML = `<i class="fas fa-user"></i> ${user.email} <button onclick="logout()" style="margin-left:10px;padding:2px 6px;border:none;border-radius:5px;background:#ffdd57;cursor:pointer;">Logout</button>`;
+        profileLi.innerHTML = `<i class="fas fa-user"></i> ${user.displayName || user.email} <button onclick="logout()" style="margin-left:10px;padding:2px 6px;border:none;border-radius:5px;background:#ffdd57;cursor:pointer;">Logout</button>`;
     } else {
         authContainer.style.display = "block";
         heroContainer.style.display = "none";
@@ -100,7 +100,15 @@ auth.onAuthStateChanged(user => {
 document.getElementById("signupBtn").addEventListener("click", ()=>{
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    auth.createUserWithEmailAndPassword(email,password).catch(e=>alert(e.message));
+    const displayName = document.getElementById("displayName").value.trim();
+
+    if(!displayName){ alert("Trebuie să introduci un nume de utilizator!"); return; }
+
+    auth.createUserWithEmailAndPassword(email,password)
+    .then(userCredential => {
+        return userCredential.user.updateProfile({ displayName: displayName });
+    })
+    .catch(e=>alert(e.message));
 });
 
 document.getElementById("loginBtn").addEventListener("click", ()=>{
