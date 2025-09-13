@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Acasă</title>
+<title>Acasă - Blue Antrenamente</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -12,170 +12,29 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
 <style>
-body {
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #0b0c17, #1b1f38, #4fc3f7);
-    background-size: cover;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-}
+body { margin:0; font-family:'Roboto',sans-serif; background: linear-gradient(135deg,#0b0c17,#1b1f38,#4fc3f7); color:#fff; min-height:100vh; }
+nav { display:flex; justify-content:center; background-color:rgba(20,22,35,0.95); padding:10px 20px; box-shadow:0 2px 10px rgba(0,0,0,0.5); border-radius:8px; margin-bottom:40px; }
+nav ul { list-style:none; display:flex; gap:30px; align-items:center; margin:0; padding:0; }
+nav ul li { display:flex; flex-direction:column; align-items:center; transition:0.2s; }
+nav ul li:hover { transform:translateY(-3px); }
+nav ul li i { font-size:1.2em; margin-bottom:5px; color:#a0a0a0; transition:0.2s; }
+nav ul li span { font-weight:700; font-size:0.9em; color:#fff; letter-spacing:0.5px; transition:0.2s; }
+nav ul li:hover i, nav ul li:hover span { color:#ffdd57; }
+nav ul li a { text-decoration:none; display:flex; flex-direction:column; align-items:center; }
+#profile { margin-left:20px; font-weight:700; }
 
-/* Navbar */
-nav {
-    display: flex;
-    justify-content: center;
-    background-color: rgba(20, 22, 35, 0.95);
-    padding: 10px 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    border-radius: 8px;
-    margin-bottom: 40px;
-}
+#authContainer { display:none; text-align:center; margin:20px auto; padding:20px; max-width:300px; background-color:rgba(20,22,35,0.85); border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.5); }
+#authContainer input { padding:10px; margin:10px 0; border-radius:8px; border:none; width:100%; }
+#authContainer button { padding:10px 20px; margin:10px 5px; border:none; border-radius:8px; font-weight:700; cursor:pointer; background-color:#4fc3f7; color:#0b0c17; transition:0.2s; }
+#authContainer button:hover { background-color:#ffdd57; }
 
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-nav ul li {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: transform 0.2s;
-}
-
-nav ul li:hover {
-    transform: translateY(-3px);
-}
-
-nav ul li i {
-    font-size: 1.2em;
-    margin-bottom: 5px;
-    color: #a0a0a0;
-    transition: color 0.2s;
-}
-
-nav ul li span {
-    font-weight: 700;
-    font-size: 0.9em;
-    color: #fff;
-    letter-spacing: 0.5px;
-    transition: color 0.2s;
-}
-
-nav ul li:hover i,
-nav ul li:hover span {
-    color: #ffdd57;
-}
-
-nav ul li a {
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Hero */
-.hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    max-width: 900px;
-    padding: 40px 20px;
-    background-color: rgba(20, 22, 35, 0.8);
-    border-radius: 15px;
-    box-shadow: 0 0 25px rgba(0,0,0,0.6);
-    margin-bottom: 50px;
-    animation: fadeIn 1.5s ease-in;
-}
-
-.hero .logo {
-    width: 180px;
-    margin-bottom: 25px;
-}
-
-.hero h1 {
-    font-size: 2em;
-    color: #4fc3f7;
-    margin-bottom: 20px;
-}
-
-.hero p {
-    font-size: 1.2em;
-    line-height: 1.6;
-    color: #ffffff;
-    margin-bottom: 20px;
-}
-
-.hero .cta {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.hero .cta a {
-    padding: 12px 25px;
-    background-color: #4fc3f7;
-    color: #0b0c17;
-    font-weight: 700;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: transform 0.2s, background-color 0.2s;
-}
-
-.hero .cta a:hover {
-    transform: scale(1.05);
-    background-color: #ffdd57;
-}
-
-/* Fade animation */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px);}
-    to { opacity: 1; transform: translateY(0);}
-}
-
-/* Login/Register */
-#authContainer {
-    text-align: center;
-    margin: 20px;
-    padding: 20px;
-    background-color: rgba(20,22,35,0.85);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-
-#authContainer input {
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: none;
-    width: 200px;
-}
-
-#authContainer button {
-    padding: 10px 20px;
-    margin: 10px 5px;
-    border: none;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-    background-color: #4fc3f7;
-    color: #0b0c17;
-    transition: 0.2s;
-}
-
-#authContainer button:hover {
-    background-color: #ffdd57;
-}
+.hero { display:none; flex-direction:column; align-items:center; text-align:center; max-width:900px; padding:40px 20px; background-color:rgba(20,22,35,0.8); border-radius:15px; box-shadow:0 0 25px rgba(0,0,0,0.6); margin-bottom:50px; }
+.hero .logo { width:180px; margin-bottom:25px; }
+.hero h1 { font-size:2em; color:#4fc3f7; margin-bottom:20px; }
+.hero p { font-size:1.2em; line-height:1.6; color:#fff; margin-bottom:20px; }
+.hero .cta { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+.hero .cta a { padding:12px 25px; background-color:#4fc3f7; color:#0b0c17; font-weight:700; border-radius:8px; text-decoration:none; transition:0.2s; }
+.hero .cta a:hover { transform:scale(1.05); background-color:#ffdd57; }
 </style>
 </head>
 <body>
@@ -186,72 +45,71 @@ nav ul li a {
         <li><a href="index.html"><i class="fas fa-home"></i><span>Acasă</span></a></li>
         <li><a href="forum.html"><i class="fas fa-comments"></i><span>Forum</span></a></li>
         <li><a href="https://discord.gg/blueantr" target="_blank"><i class="fab fa-discord"></i><span>Discord</span></a></li>
+        <li id="profile"></li>
     </ul>
 </nav>
 
 <!-- Login/Register -->
 <div id="authContainer">
     <h2>Autentificare / Înregistrare</h2>
-    <input type="email" id="email" placeholder="Email" required><br>
-    <input type="password" id="password" placeholder="Parola" required><br>
+    <input type="email" id="email" placeholder="Email"><br>
+    <input type="password" id="password" placeholder="Parola"><br>
     <button id="loginBtn">Loghează-te</button>
     <button id="signupBtn">Înregistrează-te</button>
 </div>
 
 <!-- Hero -->
-<div class="hero">
+<div class="hero" id="heroContainer">
     <img src="logo.png" alt="Logo" class="logo">
     <h1>Bine ai venit în comunitatea <span>Blue Antrenamente [BlueTraining]</span>!</h1>
-    <p>Suntem o comunitate bazată pe un server de antrenamente și practică, creată pentru a-ți dezvolta abilitățile și a te distra în același timp.</p>
-    <p>Odată ce ai intrat, te rugăm să te comporți civilizat și să respecți regulile serverului.</p>
+    <p>Suntem o comunitate bazată pe un server de antrenamente și practică.</p>
+    <p>Respectă regulile și comportă-te civilizat.</p>
 </div>
 
 <script>
-  // Firebase config
-  const firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyCb7M7Swr5NpeqitxUrgwe5dtEV0O2jViw",
     authDomain: "blue-antrenamente.firebaseapp.com",
+    databaseURL: "https://blue-antrenamente-default-rtdb.firebaseio.com",
     projectId: "blue-antrenamente",
     storageBucket: "blue-antrenamente.firebasestorage.app",
     messagingSenderId: "141876735651",
-    appId: "1:141876735651:web:42b56f71b8982956f99916",
-    measurementId: "G-B3805DQWJX"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
+    appId: "1:141876735651:web:42b56f71b8982956f99916"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-  const authContainer = document.getElementById("authContainer");
-  const hero = document.querySelector(".hero");
-  hero.style.display = "none"; // ascunde până se loghează
+document.body.style.visibility = "hidden";
 
-  // Signup
-  document.getElementById("signupBtn").addEventListener("click", () => {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(() => alert("Cont creat cu succes!"))
-      .catch(error => alert(error.message));
-  });
+const authContainer = document.getElementById("authContainer");
+const heroContainer = document.getElementById("heroContainer");
+const profileLi = document.getElementById("profile");
 
-  // Login
-  document.getElementById("loginBtn").addEventListener("click", () => {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    auth.signInWithEmailAndPassword(email, password)
-      .then(() => alert("Te-ai logat cu succes!"))
-      .catch(error => alert(error.message));
-  });
-
-  // Monitorizare stare autentificare
-  auth.onAuthStateChanged(user => {
+auth.onAuthStateChanged(user => {
     if(user){
-      authContainer.style.display = "none";
-      hero.style.display = "flex";
+        authContainer.style.display = "none";
+        heroContainer.style.display = "flex";
+        profileLi.innerHTML = `<i class="fas fa-user"></i> ${user.email} <button onclick="logout()" style="margin-left:10px;padding:2px 6px;border:none;border-radius:5px;background:#ffdd57;cursor:pointer;">Logout</button>`;
     } else {
-      authContainer.style.display = "block";
-      hero.style.display = "none";
+        authContainer.style.display = "block";
+        heroContainer.style.display = "none";
     }
-  });
+    document.body.style.visibility = "visible";
+});
+
+document.getElementById("signupBtn").addEventListener("click", ()=>{
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    auth.createUserWithEmailAndPassword(email,password).catch(e=>alert(e.message));
+});
+
+document.getElementById("loginBtn").addEventListener("click", ()=>{
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    auth.signInWithEmailAndPassword(email,password).catch(e=>alert(e.message));
+});
+
+function logout(){ auth.signOut(); }
 </script>
 
 </body>
