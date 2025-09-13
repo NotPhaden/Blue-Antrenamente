@@ -1,38 +1,162 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feedback - Blue Antrenamente</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<style>
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg,#0b0c17,#1b1f38,#4fc3f7);
+    color: #fff;
+    min-height: 100vh;
+}
+/* Navbar */
+nav {
+    display:flex;
+    justify-content:center;
+    background-color:rgba(20,22,35,0.95);
+    padding:10px 20px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.5);
+    border-radius:8px;
+    margin-bottom:20px;
+}
+nav ul {
+    list-style:none;
+    display:flex;
+    gap:30px;
+    align-items:center;
+    margin:0;
+    padding:0;
+}
+nav ul li {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    transition:0.2s;
+}
+nav ul li:hover { transform:translateY(-3px); }
+nav ul li i { font-size:1.2em; margin-bottom:5px; color:#a0a0a0; transition:0.2s; }
+nav ul li span { font-weight:700; font-size:0.9em; color:#fff; letter-spacing:0.5px; transition:0.2s; }
+nav ul li:hover i, nav ul li:hover span { color:#ffdd57; }
+nav ul li a { text-decoration:none; display:flex; flex-direction:column; align-items:center; }
+#profile { margin-left:20px; font-weight:700; }
+
+/* Container feedback */
+.container { max-width:900px; margin:0 auto 50px auto; padding:30px 20px; background-color:rgba(20,22,35,0.85); border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.5); }
+.container h1 { color:#4fc3f7; text-align:center; margin-bottom:20px; }
+.container p { margin-bottom:20px; font-size:1.1em; line-height:1.5; }
+.feedback-form { display:flex; flex-direction:column; }
+.feedback-form input, .feedback-form textarea { padding:10px; margin-bottom:15px; border-radius:8px; border:none; font-size:1em; }
+.feedback-form textarea { resize:vertical; min-height:120px; }
+.feedback-form button { padding:12px 25px; background-color:#4fc3f7; color:#0b0c17; font-weight:700; border-radius:8px; border:none; cursor:pointer; transition:0.2s; }
+.feedback-form button:hover { transform:scale(1.05); background-color:#ffdd57; }
+
+#feedbackStatus { margin-top:10px; color:#ffdd57; }
+#messages { margin-top:30px; }
+.feedback-message { background:rgba(0,0,0,0.5); padding:10px; border-radius:8px; margin-bottom:10px; }
+.feedback-message strong { color:#4fc3f7; }
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+    <ul>
+        <li><a href="index.html"><i class="fas fa-home"></i><span>Acasă</span></a></li>
+        <li><a href="forum.html"><i class="fas fa-comments"></i><span>Forum</span></a></li>
+        <li><a href="https://discord.gg/blueantr" target="_blank"><i class="fab fa-discord"></i><span>Discord</span></a></li>
+        <li id="profile"></li>
+    </ul>
+</nav>
+
 <div class="container" id="feedbackContent" style="display:none;">
     <h1>Feedback și Sugestii</h1>
-    <form id="feedbackForm">
+    <p>Trimite-ne sugestiile tale pentru a îmbunătăți comunitatea și serverul.</p>
+
+    <form id="feedbackForm" class="feedback-form">
         <input type="text" id="name" placeholder="Nume / Nickname" required>
-        <textarea id="message" placeholder="Mesajul tău" required></textarea>
+        <textarea id="message" placeholder="Scrie mesajul tău..." required></textarea>
         <button type="submit">Trimite Feedback</button>
     </form>
     <div id="feedbackStatus"></div>
+
+    <div id="messages"></div>
 </div>
-<div id="loginMessage">Trebuie să te autentifici pentru a vedea această pagină!</div>
+
+<div id="loginMessage" style="text-align:center; margin:50px; font-size:1.2em; color:#ffdd57;">Se încarcă pagina...</div>
 
 <script>
+const firebaseConfig = {
+    apiKey: "AIzaSyCb7M7Swr5NpeqitxUrgwe5dtEV0O2jViw",
+    authDomain: "blue-antrenamente.firebaseapp.com",
+    databaseURL: "https://blue-antrenamente-default-rtdb.firebaseio.com",
+    projectId: "blue-antrenamente",
+    storageBucket: "blue-antrenamente.firebasestorage.app",
+    messagingSenderId: "141876735651",
+    appId: "1:141876735651:web:42b56f71b8982956f99916"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 const db = firebase.database();
+
 const feedbackContent = document.getElementById("feedbackContent");
 const loginMessage = document.getElementById("loginMessage");
 const feedbackForm = document.getElementById("feedbackForm");
 const feedbackStatus = document.getElementById("feedbackStatus");
+const messagesDiv = document.getElementById("messages");
+const profileLi = document.getElementById("profile");
+
+function logout(){ auth.signOut(); }
 
 auth.onAuthStateChanged(user=>{
     if(user){
         feedbackContent.style.display="block";
         loginMessage.style.display="none";
-        profileLi.innerHTML=`<i class="fas fa-user"></i> ${user.displayName || user.email} <button onclick="logout()" style="margin-left:10px;padding:2px 6px;border:none;border-radius:5px;background:#ffdd57;cursor:pointer;">Logout</button>`;
+        profileLi.innerHTML = `<i class="fas fa-user"></i> ${user.displayName || user.email} <button onclick="logout()" style="margin-left:10px;padding:2px 6px;border:none;border-radius:5px;background:#ffdd57;cursor:pointer;">Logout</button>`;
+
+        // Trimite feedback
         feedbackForm.addEventListener("submit", e=>{
             e.preventDefault();
-            const msg = {name:document.getElementById("name").value, message:document.getElementById("message").value, userId:user.uid};
-            db.ref("feedback").push(msg).then(()=>{
-                feedbackStatus.textContent="Mesaj trimis!";
+            const msg = {
+                name: document.getElementById("name").value,
+                message: document.getElementById("message").value,
+                userId: user.uid,
+                timestamp: Date.now()
+            };
+            db.ref("feedback").push(msg)
+            .then(()=>{
+                feedbackStatus.textContent = "Mesaj trimis!";
                 feedbackForm.reset();
-            }).catch(err=>feedbackStatus.textContent="Eroare: "+err);
+            })
+            .catch(err=>feedbackStatus.textContent = "Eroare: "+err);
         });
+
+        // Afișează mesaje în timp real
+        db.ref("feedback").on("value", snapshot=>{
+            messagesDiv.innerHTML = '';
+            snapshot.forEach(child=>{
+                const data = child.val();
+                const div = document.createElement("div");
+                div.classList.add("feedback-message");
+                div.innerHTML = `<strong>${data.name}:</strong> ${data.message}`;
+                messagesDiv.appendChild(div);
+            });
+        });
+
     } else {
         feedbackContent.style.display="none";
         loginMessage.style.display="block";
-        profileLi.innerHTML='';
+        loginMessage.textContent = "Trebuie să te autentifici pentru a vedea această pagină!";
+        profileLi.innerHTML = '';
     }
 });
 </script>
+</body>
+</html>
