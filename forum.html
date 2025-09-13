@@ -3,25 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Feedback - Blue Antrenamente</title>
+<title>Forum - Blue Antrenamente</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <!-- Favicon -->
-<script>
-(function() {
-    const link = document.createElement('link');
-    link.rel = 'icon';
-    link.type = 'image/png';
-    link.href = 'logo.png';
-    document.head.appendChild(link);
-})();
-</script>
+<link rel="icon" type="image/png" href="logo.png">
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <style>
 body { margin:0; font-family:'Roboto',sans-serif; background: linear-gradient(135deg,#0b0c17,#1b1f38,#4fc3f7); color:#fff; min-height:100vh; }
@@ -35,16 +26,15 @@ nav ul li:hover i, nav ul li:hover span { color:#ffdd57; }
 nav ul li a { text-decoration:none; display:flex; flex-direction:column; align-items:center; }
 #profile { margin-left:20px; font-weight:700; }
 
-.container { max-width:900px; margin:20px auto; padding:30px 20px; background-color:rgba(20,22,35,0.85); border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.5); display:none; }
-.container h1 { color:#4fc3f7; text-align:center; margin-bottom:20px; }
-.container p { margin-bottom:20px; font-size:1.1em; line-height:1.5; }
-.feedback-form { display:flex; flex-direction:column; }
-.feedback-form label { margin-bottom:5px; font-weight:700; }
-.feedback-form input, .feedback-form textarea { padding:10px; margin-bottom:15px; border-radius:8px; border:none; font-size:1em; }
-.feedback-form textarea { resize:vertical; min-height:120px; }
-.feedback-form button { padding:12px 25px; background-color:#4fc3f7; color:#0b0c17; font-weight:700; border-radius:8px; border:none; cursor:pointer; transition:0.2s; }
-.feedback-form button:hover { transform:scale(1.05); background-color:#ffdd57; }
-
+/* Forum */
+.forum-container { max-width:1000px; margin:20px auto; padding:0 20px; display:none; }
+.forum-header { text-align:center; margin-bottom:30px; }
+.forum-header h1 { font-size:2em; color:#4fc3f7; }
+.forum-header p { font-size:1.1em; color:#fff; }
+.forum-topic { background-color:rgba(20,22,35,0.85); padding:20px; border-radius:12px; margin-bottom:15px; box-shadow:0 0 15px rgba(0,0,0,0.5); transition:0.2s; text-decoration:none; display:block; color:#fff; }
+.forum-topic:hover { transform:translateY(-3px); background-color:rgba(20,22,35,0.95); }
+.forum-topic h2 { margin:0 0 10px 0; color:#4fc3f7; }
+.forum-topic p { margin:0; }
 #loginMessage { text-align:center; margin:50px; font-size:1.2em; color:#ffdd57; }
 </style>
 </head>
@@ -59,21 +49,23 @@ nav ul li a { text-decoration:none; display:flex; flex-direction:column; align-i
     </ul>
 </nav>
 
-<div id="loginMessage">Se încarcă pagina de feedback...</div>
+<div id="loginMessage">Se încarcă forumul...</div>
 
-<div class="container" id="feedbackContainer">
-    <h1>Feedback și Sugestii - Blue Antrenamente</h1>
-    <p>Trimite-ne sugestiile tale sau oferă feedback pentru a îmbunătăți comunitatea și serverul.</p>
+<div class="forum-container" id="forumContent">
+    <div class="forum-header">
+        <h1>Forum - Blue Antrenamente</h1>
+        <p>Aici găsești toate discuțiile comunității.</p>
+    </div>
 
-    <form class="feedback-form" id="feedbackForm">
-        <label for="name">Nume / Nickname:</label>
-        <input type="text" id="name" placeholder="Introdu numele tău..." required>
+    <a href="regulament.html" class="forum-topic">
+        <h2>Regulamentul Server-ului</h2>
+        <p>Toate regulile oficiale și comportamentul necesar pe serverul de antrenamente.</p>
+    </a>
 
-        <label for="message">Mesaj:</label>
-        <textarea id="message" placeholder="Scrie mesajul tău..." required></textarea>
-
-        <button type="submit">Trimite Feedback</button>
-    </form>
+    <a href="feedback.html" class="forum-topic">
+        <h2>Feedback și Sugestii</h2>
+        <p>Trimite feedback și propune idei pentru îmbunătățirea comunității.</p>
+    </a>
 </div>
 
 <script>
@@ -88,23 +80,26 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-const db = firebase.database();
-
-const feedbackContainer = document.getElementById("feedbackContainer");
+const forumContent = document.getElementById("forumContent");
 const loginMessage = document.getElementById("loginMessage");
 const profileLi = document.getElementById("profile");
 
-document.body.style.visibility = "hidden";
-
-// Verificare autentificare
 auth.onAuthStateChanged(user => {
     if(user){
-        feedbackContainer.style.display = "block";
+        forumContent.style.display = "block";
         loginMessage.style.display = "none";
         profileLi.innerHTML = `<i class="fas fa-user"></i> ${user.displayName || user.email} 
         <button onclick="logout()" style="margin-left:10px;padding:2px 6px;border:none;border-radius:5px;background:#ffdd57;cursor:pointer;">Logout</button>`;
-        document.body.style.visibility = "visible";
     } else {
-        feedbackContainer.style.display = "none";
-        loginMessage.textContent = "Trebuie să te autentifici pentru a vedea pagina de feedback!";
+        forumContent.style.display = "none";
+        loginMessage.textContent = "Trebuie să te autentifici pentru a vedea forumul!";
         profileLi.innerHTML = '';
+    }
+    document.body.style.visibility = "visible";
+});
+
+function logout(){ auth.signOut(); }
+</script>
+
+</body>
+</html>
