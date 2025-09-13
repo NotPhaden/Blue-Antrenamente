@@ -6,98 +6,32 @@
 <title>Regulament - Blue Antrenamente</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
 <style>
-body {
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #0b0c17, #1b1f38, #4fc3f7);
-    color: #fff;
-    min-height: 100vh;
-}
+body { margin: 0; font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #0b0c17, #1b1f38, #4fc3f7); color: #fff; min-height: 100vh; }
+nav { display: flex; justify-content: center; background-color: rgba(20, 22, 35, 0.95); padding: 10px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.5); border-radius: 8px; margin: 20px; }
+nav ul { list-style: none; display: flex; gap: 20px; align-items: center; margin: 0; padding: 0; }
+nav ul li { display: flex; flex-direction: column; align-items: center; transition: transform 0.2s; }
+nav ul li:hover { transform: translateY(-3px); }
+nav ul li i { font-size: 1.2em; margin-bottom: 5px; color: #a0a0a0; transition: color 0.2s; }
+nav ul li span { font-weight: 700; font-size: 0.9em; color: #fff; letter-spacing: 0.5px; transition: color 0.2s; }
+nav ul li:hover i, nav ul li:hover span { color: #ffdd57; }
+nav ul li a { text-decoration: none; display: flex; flex-direction: column; align-items: center; }
+#profile { margin-left: 20px; font-weight: 700; }
 
-/* Navbar */
-nav {
-    display: flex;
-    justify-content: center;
-    background-color: rgba(20, 22, 35, 0.95);
-    padding: 10px 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    border-radius: 8px;
-    margin: 20px;
-}
+#authContainer { display: none; text-align: center; margin: 20px auto; padding: 20px; max-width: 300px; background-color: rgba(20,22,35,0.85); border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+#authContainer input { padding: 10px; margin: 10px 0; border-radius: 8px; border: none; width: 100%; }
+#authContainer button { padding: 10px 20px; margin: 10px 5px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; background-color: #4fc3f7; color: #0b0c17; transition: 0.2s; }
+#authContainer button:hover { background-color: #ffdd57; }
 
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-nav ul li {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: transform 0.2s;
-}
-
-nav ul li:hover {
-    transform: translateY(-3px);
-}
-
-nav ul li i {
-    font-size: 1.2em;
-    margin-bottom: 5px;
-    color: #a0a0a0;
-    transition: color 0.2s;
-}
-
-nav ul li span {
-    font-weight: 700;
-    font-size: 0.9em;
-    color: #fff;
-    letter-spacing: 0.5px;
-    transition: color 0.2s;
-}
-
-nav ul li:hover i,
-nav ul li:hover span {
-    color: #ffdd57;
-}
-
-nav ul li a {
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Container content */
-.container {
-    max-width: 900px;
-    margin: 0 auto 50px auto;
-    padding: 30px 20px;
-    background-color: rgba(20, 22, 35, 0.85);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-
-.container h1 {
-    color: #4fc3f7;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.container ul {
-    list-style: disc;
-    padding-left: 20px;
-}
-
-.container ul li {
-    margin-bottom: 10px;
-    line-height: 1.5;
-}
+.container { max-width: 900px; margin: 0 auto 50px auto; padding: 30px 20px; background-color: rgba(20, 22, 35, 0.85); border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.5); display: none; }
+.container h1 { color: #4fc3f7; text-align: center; margin-bottom: 20px; }
+.container ul { list-style: disc; padding-left: 20px; }
+.container ul li { margin-bottom: 10px; line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -105,29 +39,24 @@ nav ul li a {
 <!-- Navbar -->
 <nav>
     <ul>
-        <li>
-            <a href="index.html">
-                <i class="fas fa-home"></i>
-                <span>Acasă</span>
-            </a>
-        </li>
-        <li>
-            <a href="forum.html">
-                <i class="fas fa-comments"></i>
-                <span>Forum</span>
-            </a>
-        </li>
-        <li>
-            <a href="https://discord.gg/blueantr" target="_blank">
-                <i class="fab fa-discord"></i>
-                <span>Discord</span>
-            </a>
-        </li>
+        <li><a href="index.html"><i class="fas fa-home"></i><span>Acasă</span></a></li>
+        <li><a href="forum.html"><i class="fas fa-comments"></i><span>Forum</span></a></li>
+        <li><a href="https://discord.gg/blueantr" target="_blank"><i class="fab fa-discord"></i><span>Discord</span></a></li>
+        <li id="profile"></li>
     </ul>
 </nav>
 
+<!-- Login/Register -->
+<div id="authContainer">
+    <h2>Autentificare / Înregistrare</h2>
+    <input type="email" id="email" placeholder="Email" required><br>
+    <input type="password" id="password" placeholder="Parola" required><br>
+    <button id="loginBtn">Loghează-te</button>
+    <button id="signupBtn">Înregistrează-te</button>
+</div>
+
 <!-- Regulament -->
-<div class="container">
+<div class="container" id="regulamentContainer">
     <h1>Regulament Server - Blue Antrenamente</h1>
     <ul>
         <li>Respectă ceilalți jucători și staff-ul comunității.</li>
@@ -138,6 +67,62 @@ nav ul li a {
         <li>Orice încălcare a regulilor poate duce la sancțiuni, inclusiv ban permanent.</li>
     </ul>
 </div>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyCb7M7Swr5NpeqitxUrgwe5dtEV0O2jViw",
+    authDomain: "blue-antrenamente.firebaseapp.com",
+    databaseURL: "https://blue-antrenamente-default-rtdb.firebaseio.com",
+    projectId: "blue-antrenamente",
+    storageBucket: "blue-antrenamente.firebasestorage.app",
+    messagingSenderId: "141876735651",
+    appId: "1:141876735651:web:42b56f71b8982956f99916"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+const authContainer = document.getElementById("authContainer");
+const regulamentContainer = document.getElementById("regulamentContainer");
+const profileLi = document.getElementById("profile");
+
+// Ascunde tot până se verifică starea autentificării
+document.body.style.visibility = "hidden";
+
+auth.onAuthStateChanged(user => {
+    if(user){
+        // Utilizator logat
+        authContainer.style.display = "none";
+        regulamentContainer.style.display = "block";
+        profileLi.innerHTML = `<i class="fas fa-user"></i> ${user.email} <button onclick="logout()" style="margin-left:10px;padding:2px 6px;border:none;border-radius:5px;background:#ffdd57;cursor:pointer;">Logout</button>`;
+    } else {
+        // Nu este logat
+        authContainer.style.display = "block";
+        regulamentContainer.style.display = "none";
+    }
+    document.body.style.visibility = "visible"; // afișează pagina după verificare
+});
+
+// Signup
+document.getElementById("signupBtn").addEventListener("click", ()=>{
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    auth.createUserWithEmailAndPassword(email,password)
+        .catch(e=>alert(e.message));
+});
+
+// Login
+document.getElementById("loginBtn").addEventListener("click", ()=>{
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    auth.signInWithEmailAndPassword(email,password)
+        .catch(e=>alert(e.message));
+});
+
+// Logout
+function logout(){
+    auth.signOut();
+}
+</script>
 
 </body>
 </html>
