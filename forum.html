@@ -6,205 +6,58 @@
 <title>Forum - Blue Antrenamente</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
 <style>
-body {
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #0b0c17, #1b1f38, #4fc3f7);
-    color: #fff;
-    min-height: 100vh;
-}
+body { margin:0; font-family:'Roboto',sans-serif; background: linear-gradient(135deg,#0b0c17,#1b1f38,#4fc3f7); color:#fff; min-height:100vh; }
+nav { display:flex; justify-content:center; background-color:rgba(20,22,35,0.95); padding:10px 20px; box-shadow:0 2px 10px rgba(0,0,0,0.5); border-radius:8px; margin-bottom:20px; }
+nav ul { list-style:none; display:flex; gap:30px; align-items:center; margin:0; padding:0; }
+nav ul li { display:flex; flex-direction:column; align-items:center; transition:0.2s; }
+nav ul li:hover { transform:translateY(-3px); }
+nav ul li i { font-size:1.2em; margin-bottom:5px; color:#a0a0a0; transition:0.2s; }
+nav ul li span { font-weight:700; font-size:0.9em; color:#fff; letter-spacing:0.5px; transition:0.2s; }
+nav ul li:hover i, nav ul li:hover span { color:#ffdd57; }
+nav ul li a { text-decoration:none; display:flex; flex-direction:column; align-items:center; }
+#profile { margin-left:20px; font-weight:700; }
 
-/* Navbar */
-nav {
-    display: flex;
-    justify-content: center;
-    background-color: rgba(20, 22, 35, 0.95);
-    padding: 10px 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    border-radius: 8px;
-    margin: 20px;
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-nav ul li {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: transform 0.2s;
-}
-
-nav ul li:hover {
-    transform: translateY(-3px);
-}
-
-nav ul li i {
-    font-size: 1.2em;
-    margin-bottom: 5px;
-    color: #a0a0a0;
-    transition: color 0.2s;
-}
-
-nav ul li span {
-    font-weight: 700;
-    font-size: 0.9em;
-    color: #fff;
-    letter-spacing: 0.5px;
-    transition: color 0.2s;
-}
-
-nav ul li:hover i,
-nav ul li:hover span {
-    color: #ffdd57;
-}
-
-nav ul li a {
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Auth container */
-#authContainer {
-    text-align: center;
-    margin: 20px auto;
-    padding: 20px;
-    max-width: 300px;
-    background-color: rgba(20,22,35,0.85);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-
-#authContainer input {
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: none;
-    width: 100%;
-}
-
-#authContainer button {
-    padding: 10px 20px;
-    margin: 10px 5px;
-    border: none;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-    background-color: #4fc3f7;
-    color: #0b0c17;
-    transition: 0.2s;
-}
-
-#authContainer button:hover {
-    background-color: #ffdd57;
-}
-
-/* Forum container */
-.forum-container {
-    max-width: 1000px;
-    margin: 0 auto 50px auto;
-    padding: 0 20px;
-    display: none; /* ascuns până la logare */
-}
-
-.forum-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.forum-header h1 {
-    font-size: 2em;
-    color: #4fc3f7;
-}
-
-.forum-header p {
-    font-size: 1.1em;
-    color: #ffffff;
-}
-
-.forum-topic {
-    background-color: rgba(20, 22, 35, 0.85);
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
-    transition: transform 0.2s, background-color 0.2s;
-    cursor: pointer;
-    text-decoration: none;
-    display: block;
-}
-
-.forum-topic:hover {
-    transform: translateY(-3px);
-    background-color: rgba(20, 22, 35, 0.95);
-}
-
-.forum-topic h2 {
-    margin: 0 0 10px 0;
-    color: #4fc3f7;
-}
-
-.forum-topic p {
-    margin: 0;
-    color: #fff;
-}
-
-@media (max-width: 768px) {
-    .forum-header h1 {
-        font-size: 1.6em;
-    }
-}
+/* Forum */
+.forum-container { max-width:1000px; margin:20px auto; padding:0 20px; }
+.forum-header { text-align:center; margin-bottom:30px; }
+.forum-header h1 { font-size:2em; color:#4fc3f7; }
+.forum-header p { font-size:1.1em; color:#fff; }
+.forum-topic { background-color:rgba(20,22,35,0.85); padding:20px; border-radius:12px; margin-bottom:15px; box-shadow:0 0 15px rgba(0,0,0,0.5); transition:0.2s; text-decoration:none; display:block; color:#fff; }
+.forum-topic:hover { transform:translateY(-3px); background-color:rgba(20,22,35,0.95); }
+.forum-topic h2 { margin:0 0 10px 0; color:#4fc3f7; }
+.forum-topic p { margin:0; }
+#loginMessage { text-align:center; margin:50px; font-size:1.2em; color:#ffdd57; }
 </style>
 </head>
 <body>
 
-<!-- Navbar -->
 <nav>
     <ul>
         <li><a href="index.html"><i class="fas fa-home"></i><span>Acasă</span></a></li>
         <li><a href="forum.html"><i class="fas fa-comments"></i><span>Forum</span></a></li>
         <li><a href="https://discord.gg/blueantr" target="_blank"><i class="fab fa-discord"></i><span>Discord</span></a></li>
+        <li id="profile"></li>
     </ul>
 </nav>
 
-<!-- Login/Register -->
-<div id="authContainer">
-    <h2>Autentificare / Înregistrare</h2>
-    <input type="email" id="email" placeholder="Email" required><br>
-    <input type="password" id="password" placeholder="Parola" required><br>
-    <button id="loginBtn">Loghează-te</button>
-    <button id="signupBtn">Înregistrează-te</button>
-</div>
-
-<!-- Forum container -->
-<div class="forum-container" id="forumContent">
+<div id="loginMessage">Se încarcă forumul...</div>
+<div class="forum-container" id="forumContent" style="display:none;">
     <div class="forum-header">
         <h1>Forum - Blue Antrenamente</h1>
-        <p>Aici găsești toate discuțiile și informațiile comunității.</p>
+        <p>Aici găsești toate discuțiile comunității.</p>
     </div>
 
     <a href="regulament.html" class="forum-topic">
         <h2>Regulamentul Server-ului</h2>
-        <p>Toate regulile oficiale și comportamentul necesar pentru a participa la serverul de antrenamente.</p>
+        <p>Toate regulile oficiale și comportamentul necesar pe serverul de antrenamente.</p>
     </a>
 
     <a href="feedback.html" class="forum-topic">
         <h2>Feedback și Sugestii</h2>
-        <p>Oferă feedback și propune idei pentru îmbunătățirea comunității și serverului.</p>
+        <p>Trimite feedback și propune idei pentru îmbunătățirea comunității.</p>
     </a>
 </div>
 
@@ -212,52 +65,31 @@ nav ul li a {
 const firebaseConfig = {
     apiKey: "AIzaSyCb7M7Swr5NpeqitxUrgwe5dtEV0O2jViw",
     authDomain: "blue-antrenamente.firebaseapp.com",
+    databaseURL: "https://blue-antrenamente-default-rtdb.firebaseio.com",
     projectId: "blue-antrenamente",
     storageBucket: "blue-antrenamente.firebasestorage.app",
     messagingSenderId: "141876735651",
-    appId: "1:141876735651:web:42b56f71b8982956f99916",
-    measurementId: "G-B3805DQWJX"
+    appId: "1:141876735651:web:42b56f71b8982956f99916"
 };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-
-const authContainer = document.getElementById("authContainer");
 const forumContent = document.getElementById("forumContent");
+const loginMessage = document.getElementById("loginMessage");
+const profileLi = document.getElementById("profile");
 
-// Signup
-document.getElementById("signupBtn").addEventListener("click", ()=>{
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    if(!email.includes("@")) { alert("Email invalid!"); return; }
-    if(password.length < 6){ alert("Parola trebuie să aibă minim 6 caractere!"); return; }
-
-    auth.createUserWithEmailAndPassword(email, password)
-        .then(()=>alert("Cont creat cu succes!"))
-        .catch(e=>alert(e.message));
-});
-
-// Login
-document.getElementById("loginBtn").addEventListener("click", ()=>{
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    if(!email.includes("@")) { alert("Email invalid!"); return; }
-    if(password.length < 6){ alert("Parola trebuie să aibă minim 6 caractere!"); return; }
-
-    auth.signInWithEmailAndPassword(email, password)
-        .then(()=>alert("Te-ai logat cu succes!"))
-        .catch(e=>alert(e.message));
-});
-
-// Monitorizare stare autentificare
-auth.onAuthStateChanged(user=>{
+auth.onAuthStateChanged(user => {
     if(user){
-        authContainer.style.display="none";
-        forumContent.style.display="block";
+        forumContent.style.display = "block";
+        loginMessage.style.display = "none";
+        profileLi.innerHTML = `<i class="fas fa-user"></i> ${user.displayName || user.email} <button onclick="logout()" style="margin-left:10px;padding:2px 6px;border:none;border-radius:5px;background:#ffdd57;cursor:pointer;">Logout</button>`;
     } else {
-        authContainer.style.display="block";
-        forumContent.style.display="none";
+        forumContent.style.display = "none";
+        loginMessage.textContent = "Trebuie să te autentifici pentru a vedea forumul!";
+        profileLi.innerHTML = '';
     }
 });
+
+function logout(){ auth.signOut(); }
 </script>
 
 </body>
