@@ -6,40 +6,27 @@
 <title>Regulament - Blue Antrenamente</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Favicon -->
+<script>
+(function() {
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.type = 'image/png';
+    link.href = 'logo.png';
+    document.head.appendChild(link);
+})();
+</script>
+
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <style>
-body {
-    margin:0;
-    font-family:'Roboto',sans-serif;
-    background:linear-gradient(135deg,#0b0c17,#1b1f38,#4fc3f7);
-    color:#fff;
-    min-height:100vh;
-}
-nav {
-    display:flex;
-    justify-content:center;
-    background-color:rgba(20,22,35,0.95);
-    padding:10px 20px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.5);
-    border-radius:8px;
-    margin-bottom:20px;
-}
-nav ul {
-    list-style:none;
-    display:flex;
-    gap:30px;
-    align-items:center;
-    margin:0;
-    padding:0;
-}
-nav ul li {
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    transition:0.2s;
-}
+body { margin:0; font-family:'Roboto',sans-serif; background: linear-gradient(135deg,#0b0c17,#1b1f38,#4fc3f7); color:#fff; min-height:100vh; }
+nav { display:flex; justify-content:center; background-color:rgba(20,22,35,0.95); padding:10px 20px; box-shadow:0 2px 10px rgba(0,0,0,0.5); border-radius:8px; margin-bottom:20px; }
+nav ul { list-style:none; display:flex; gap:30px; align-items:center; margin:0; padding:0; }
+nav ul li { display:flex; flex-direction:column; align-items:center; transition:0.2s; }
 nav ul li:hover { transform:translateY(-3px); }
 nav ul li i { font-size:1.2em; margin-bottom:5px; color:#a0a0a0; transition:0.2s; }
 nav ul li span { font-weight:700; font-size:0.9em; color:#fff; letter-spacing:0.5px; transition:0.2s; }
@@ -47,21 +34,14 @@ nav ul li:hover i, nav ul li:hover span { color:#ffdd57; }
 nav ul li a { text-decoration:none; display:flex; flex-direction:column; align-items:center; }
 #profile { margin-left:20px; font-weight:700; }
 
-.container {
-    max-width:900px;
-    margin:0 auto 50px auto;
-    padding:30px 20px;
-    background-color:rgba(20,22,35,0.85);
-    border-radius:12px;
-    box-shadow:0 0 20px rgba(0,0,0,0.5);
-}
+.container { max-width:900px; margin:20px auto; padding:30px 20px; background-color:rgba(20,22,35,0.85); border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.5); display:none; }
 .container h1 { color:#4fc3f7; text-align:center; margin-bottom:20px; }
-.container ul { list-style:disc; padding-left:20px; margin-bottom:20px; }
+.container ul { list-style:disc; padding-left:20px; }
 .container ul li { margin-bottom:10px; line-height:1.5; }
 #loginMessage { text-align:center; margin:50px; font-size:1.2em; color:#ffdd57; }
 </style>
 </head>
-<body>
+<body style="visibility:hidden">
 
 <nav>
     <ul>
@@ -72,25 +52,20 @@ nav ul li a { text-decoration:none; display:flex; flex-direction:column; align-i
     </ul>
 </nav>
 
-<div id="regulamentContent" class="container" style="display:none;">
+<div id="loginMessage">Se încarcă regulamentul...</div>
+
+<div class="container" id="regulamentContainer">
     <h1>Regulament Server - Blue Antrenamente</h1>
-    <p>Acest regulament este creat pentru a menține ordinea, respectul și siguranța pe serverul nostru de antrenamente.</p>
-    
     <ul>
-        <li>Respectă ceilalți participanți și staff-ul comunității.</li>
-        <li>Fii punctual și participă activ la sesiunile de antrenamente.</li>
-        <li>Nu folosi cheat-uri, exploit-uri sau metode nepermise în timpul antrenamentelor.</li>
-        <li>Respectă indicațiile instructorilor și coordonatorilor de sesiuni.</li>
-        <li>Comportamentul neadecvat (insulte, trolling, hărțuire) nu este tolerat.</li>
-        <li>Nu posta materiale ilegale sau ofensatoare în chat sau pe forum.</li>
-        <li>Orice încălcare a regulilor poate duce la sancțiuni: avertisment, suspendare sau excludere permanentă.</li>
-        <li>Feedback-ul și sugestiile constructive sunt binevenite și pot fi trimise în secțiunea de Feedback.</li>
-        <li>Respectă programul și regulile fiecărui antrenament.</li>
-        <li>Folosirea corectă a echipamentului și resurselor puse la dispoziție este obligatorie.</li>
+        <li>Respectă ceilalți membri și staff-ul comunității.</li>
+        <li>Nu folosi cheat-uri, bug-uri sau metode nepermise.</li>
+        <li>Fii politicos în chat-ul text și vocal.</li>
+        <li>Nu posta conținut ofensator sau ilegal.</li>
+        <li>Respectă indicațiile staff-ului și regulile serverului.</li>
+        <li>Urmărește antrenamentele și exercițiile conform indicațiilor.</li>
+        <li>Orice încălcare a regulilor poate duce la sancțiuni, inclusiv ban permanent.</li>
     </ul>
 </div>
-
-<div id="loginMessage">Se încarcă pagina...</div>
 
 <script>
 const firebaseConfig = {
@@ -104,26 +79,30 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-const db = firebase.database();
 
-const regulamentContent = document.getElementById("regulamentContent");
+const regulamentContainer = document.getElementById("regulamentContainer");
 const loginMessage = document.getElementById("loginMessage");
 const profileLi = document.getElementById("profile");
 
-function logout(){ auth.signOut(); }
+document.body.style.visibility = "hidden";
 
-auth.onAuthStateChanged(user=>{
+auth.onAuthStateChanged(user => {
     if(user){
-        regulamentContent.style.display="block";
-        loginMessage.style.display="none";
-        profileLi.innerHTML = `<i class="fas fa-user"></i> ${user.displayName || user.email} <button onclick="logout()" style="margin-left:10px;padding:2px 6px;border:none;border-radius:5px;background:#ffdd57;cursor:pointer;">Logout</button>`;
+        regulamentContainer.style.display = "block";
+        loginMessage.style.display = "none";
+        profileLi.innerHTML = `<i class="fas fa-user"></i> ${user.displayName || user.email} 
+        <button onclick="logout()" style="margin-left:10px;padding:2px 6px;border:none;border-radius:5px;background:#ffdd57;cursor:pointer;">Logout</button>`;
+        document.body.style.visibility = "visible";
     } else {
-        regulamentContent.style.display="none";
-        loginMessage.style.display="block";
-        loginMessage.textContent = "Trebuie să te autentifici pentru a vedea această pagină!";
+        regulamentContainer.style.display = "none";
+        loginMessage.textContent = "Trebuie să te autentifici pentru a vedea regulamentul!";
         profileLi.innerHTML = '';
+        document.body.style.visibility = "visible";
     }
 });
+
+function logout(){ auth.signOut(); }
 </script>
+
 </body>
 </html>
