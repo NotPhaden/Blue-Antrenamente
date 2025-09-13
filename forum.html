@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forum - Blue Antrenamente</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #0b0c17, #1b1f38, #4fc3f7);
+    color: #fff;
+    min-height: 100vh;
+}
+
+/* Navbar */
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: rgba(20, 22, 35, 0.95);
+    padding: 10px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    border-radius: 8px;
+    margin: 20px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+nav ul li:hover {
+    transform: translateY(-3px);
+}
+
+nav ul li i {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    color: #a0a0a0;
+    transition: color 0.2s;
+}
+
+nav ul li span {
+    font-weight: 700;
+    font-size: 0.9em;
+    color: #fff;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+nav ul li:hover i,
+nav ul li:hover span {
+    color: #ffdd57;
+}
+
+nav ul li a {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Forum container */
+.forum-container {
+    max-width: 1000px;
+    margin: 0 auto 50px auto;
+    padding: 0 20px;
+}
+
+.forum-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.forum-header h1 {
+    font-size: 2em;
+    color: #4fc3f7;
+}
+
+.forum-header p {
+    font-size: 1.1em;
+    color: #ffffff;
+}
+
+/* Subiecte forum */
+.forum-topic {
+    background-color: rgba(20, 22, 35, 0.85);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    transition: transform 0.2s, background-color 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+}
+
+.forum-topic:hover {
+    transform: translateY(-3px);
+    background-color: rgba(20, 22, 35, 0.95);
+}
+
+.forum-topic h2 {
+    margin: 0 0 10px 0;
+    color: #4fc3f7;
+}
+
+.forum-topic p {
+    margin: 0;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .forum-header h1 {
+        font-size: 1.6em;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+    <ul>
+        <li>
+            <a href="index.html">
+                <i class="fas fa-home"></i>
+                <span>Acasă</span>
+            </a>
+        </li>
+        <li>
+            <a href="forum.html">
+                <i class="fas fa-comments"></i>
+                <span>Forum</span>
+            </a>
+        </li>
+        <li>
+            <a href="https://discord.gg/blueantr" target="_blank">
+                <i class="fab fa-discord"></i>
+                <span>Discord</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<!-- Forum container -->
+<div class="forum-container">
+    <div class="forum-header">
+        <h1>Forum - Blue Antrenamente</h1>
+        <p>Aici găsești toate discuțiile și informațiile comunității.</p>
+    </div>
+
+    <!-- Subiecte forum -->
+    <a href="regulament.html" class="forum-topic">
+        <h2>Regulamentul Server-ului</h2>
+        <p>Toate regulile oficiale și comportamentul necesar pentru a participa la serverul de antrenamente.</p>
+    </a>
+
+    <a href="feedback.html" class="forum-topic">
+        <h2>Feedback și Sugestii</h2>
+        <p>Oferă feedback și propune idei pentru îmbunătățirea comunității și serverului.</p>
+    </a>
+</div>
+
+</body>
+</html>
