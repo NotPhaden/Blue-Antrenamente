@@ -1,0 +1,9 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/regulament", "destination": "/regulament.html" },
+    { "source": "/feedback", "destination": "/feedback.html" },
+    { "source": "/forum & gdpr", "destination": "/forum.html" }
+  ]
+}
