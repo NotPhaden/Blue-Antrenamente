@@ -131,7 +131,7 @@ feedbackForm.addEventListener("submit", e => {
     fetch("https://discord.com/api/webhooks/1416312161503805461/lDCORSmDlQvY-5z6aTIEECtRrM5uDH_NbNiklxpX3pzCPiEc0xgZUd6yar_wxlgQwqED", {
         method:"POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: `**${name}** a trimis feedback:\n${message}` })
+        body: JSON.stringify({ content: `**${name}** A Trimis Feedback/Sugestii:\n${message}` })
     }).catch(console.error);
 
     feedbackStatus.textContent = "Mesaj trimis!";
@@ -140,4 +140,5 @@ feedbackForm.addEventListener("submit", e => {
 </script>
 </body>
 </html>
+
 
